@@ -13,6 +13,10 @@ public class PerlinNoise : MonoBehaviour
     [SerializeField] private int xOffset = 0;
     [SerializeField] private int yOffset = 0;
 
+    [SerializeField] private int octaves = 0;
+    [SerializeField] private float persistance = 0;
+    [SerializeField] private float lacunarity = 0;
+
     
 
     private void Update()
@@ -30,12 +34,12 @@ public class PerlinNoise : MonoBehaviour
         {
             for(int y = 0; y < height; y++)
             {
-               float xForPerlin = GetScaledCoord(x, y).xPix;
-               float yForPerlin = GetScaledCoord(x, y).yPix;
+                   float xForPerlin = GetScaledCoord(x, y).xPix;
+                   float yForPerlin = GetScaledCoord(x, y).yPix;
 
-                Color colour = GetPerlinNoiseForCoord(xForPerlin, yForPerlin);
+                    Color colour = GetPerlinNoiseForCoord(xForPerlin, yForPerlin);
 
-                texture.SetPixel(x, y, colour);
+                    texture.SetPixel(x, y, colour);
             }
         }
 

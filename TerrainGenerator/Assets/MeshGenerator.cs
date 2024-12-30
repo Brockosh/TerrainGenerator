@@ -10,6 +10,14 @@ public class MeshGenerator : MonoBehaviour
     [SerializeField] private int xSize;
     [SerializeField] private int zSize;
 
+    [SerializeField] private int scale;
+    [SerializeField] private float heightMultiplier = 2f;
+
+    [SerializeField] private float xOffset;
+    [SerializeField] private float zOffset;
+
+    [SerializeField] private float noiseScale;
+
     Vector3[] vertices;
     int[] triangles;
 
@@ -18,16 +26,15 @@ public class MeshGenerator : MonoBehaviour
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-
-        StartCoroutine(UpdateMeshDetails2());
     }
 
     private void Update()
     {
+        UpdateMeshDetails();
         UpdateMesh();
     }
 
-    private IEnumerator UpdateMeshDetails2()
+    private void UpdateMeshDetails()
     {
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
 
@@ -35,11 +42,10 @@ public class MeshGenerator : MonoBehaviour
         {
             for(int x = 0; x <= xSize; x++)
             {
-                vertices[i] = new Vector3(x, 0, z);
+                vertices[i] = new Vector3(x, GenerateHeightValue(x, z), z);
                 i++;
             }
         }
-
 
         triangles = new int[(xSize * zSize) * 6];
 
@@ -60,33 +66,15 @@ public class MeshGenerator : MonoBehaviour
                 vert++;
                 tri += 6;
 
-                yield return new WaitForSeconds(0.1f);
             }
             vert++;
         }
-
-
-
-
     }
 
-    private void UpdateMeshDetails()
+    private float GenerateHeightValue(float x, float z)
     {
-        vertices = new Vector3[]
-        {
-            new Vector3(0, 0, 0),
-            new Vector3(0, 0, 1),
-            new Vector3(1, 0, 0),
-            new Vector3(1, 0, 1),
-            
-
-        };
-
-        triangles = new int[]
-        {
-            0, 1, 2,
-            1, 3, 2
-        };
+        float y = Mathf.PerlinNoise((x * noiseScale) + xOffset, z * noiseScale + zOffset) * heightMultiplier;
+        return y;
     }
 
     private void UpdateMesh()
@@ -98,18 +86,4 @@ public class MeshGenerator : MonoBehaviour
 
         mesh.RecalculateNormals();
     }
-
-
-    private void OnDrawGizmos()
-    {
-        if (vertices == null) return;
-
-
-        foreach(var vert  in vertices)
-        {
-            Gizmos.DrawSphere(vert ,0.1f);
-
-        }
-    }
-
 }
