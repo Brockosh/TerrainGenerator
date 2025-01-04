@@ -1,89 +1,70 @@
+﻿using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter))]
-public class MeshGenerator : MonoBehaviour
+public static class MeshGenerator 
 {
-    Mesh mesh;
-
-    [SerializeField] private int xSize;
-    [SerializeField] private int zSize;
-
-    [SerializeField] private int scale;
-    [SerializeField] private float heightMultiplier = 2f;
-
-    [SerializeField] private float xOffset;
-    [SerializeField] private float zOffset;
-
-    [SerializeField] private float noiseScale;
-
-    Vector3[] vertices;
-    int[] triangles;
-
-
-    private void Start()
+    public static MeshInformation GenerateMesh(float[,] noiseMap, float scale)
     {
-        mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
-    }
+        int width = noiseMap.GetLength(0);
+        int height = noiseMap.GetLength(1);
 
-    private void Update()
-    {
-        UpdateMeshDetails();
-        UpdateMesh();
-    }
+        MeshInformation meshInformation = new MeshInformation(width, height);
 
-    private void UpdateMeshDetails()
-    {
-        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+        int vertIndex = 0;
 
-        for (int i = 0, z = 0; z <= zSize; z++)
+        for (int y = 0; y < height; y++)
         {
-            for(int x = 0; x <= xSize; x++)
+            for (int x = 0; x < width; x++)
             {
-                vertices[i] = new Vector3(x, GenerateHeightValue(x, z), z);
-                i++;
+                meshInformation.vertices[vertIndex] = new Vector3(x, noiseMap[x,y], y);
+                meshInformation.uvs[vertIndex] = new Vector2(x / (float)width, y / (float)height); 
+
+                if (x < width - 1 && y < height - 1)
+                {
+                    meshInformation.AddTriangle(vertIndex, vertIndex + width, vertIndex + width + 1);
+                    meshInformation.AddTriangle(vertIndex + width + 1, vertIndex + 1, vertIndex);
+                }
+
+                vertIndex++;
             }
         }
 
-        triangles = new int[(xSize * zSize) * 6];
+        return meshInformation;      
+    }
+}
 
-        int vert = 0;
-        int tri = 0;
+public class MeshInformation
+{
+    public Vector3[] vertices;
+    public int[] triangles;
+    public Vector2[] uvs;
 
-        for(int z  = 0; z < zSize; z++)
-        {
-            for(int i = 0; i < xSize; i++)
-            {
-                triangles[tri] = vert + 0;
-                triangles[tri + 1] = vert + xSize + 1;
-                triangles[tri + 2] = vert + 1;
-                triangles[tri + 3] = vert + 1;
-                triangles[tri + 4] = vert + xSize + 1;
-                triangles[tri + 5] = vert + xSize + 2;
-
-                vert++;
-                tri += 6;
-
-            }
-            vert++;
-        }
+    int triangleIndex;
+    public MeshInformation(int width, int height)
+    {
+        vertices = new Vector3[width * height];
+        triangles = new int[(width - 1) * (height - 1) * 6];
+        uvs = new Vector2[width * height];
     }
 
-    private float GenerateHeightValue(float x, float z)
+    public void AddTriangle(int a, int b, int c)
     {
-        float y = Mathf.PerlinNoise((x * noiseScale) + xOffset, z * noiseScale + zOffset) * heightMultiplier;
-        return y;
+        triangles[triangleIndex] = a;
+        triangles[triangleIndex + 1] = b;
+        triangles[triangleIndex + 2] = c;
+        triangleIndex += 3;
     }
 
-    private void UpdateMesh()
+    public Mesh CreateMesh()
     {
-        mesh.Clear();
-
+        Mesh mesh = new Mesh();
         mesh.vertices = vertices;
         mesh.triangles = triangles;
-
+        mesh.uv = uvs;
         mesh.RecalculateNormals();
+        return mesh;
     }
 }
