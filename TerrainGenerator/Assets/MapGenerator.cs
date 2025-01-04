@@ -27,7 +27,8 @@ public class MapGenerator : MonoBehaviour
     public Vector2 offset;
 
 
-    public float meshScale;
+    public float meshHeightMultiplier;
+    public AnimationCurve meshHeightCurve;
 
     private void Start()
     {
@@ -57,7 +58,7 @@ public class MapGenerator : MonoBehaviour
         }
         else if (drawType == DrawType.mesh)
         {
-            MeshInformation meshInfo = MeshGenerator.GenerateMesh(noiseMap, meshScale);
+            MeshInformation meshInfo = MeshGenerator.GenerateMesh(noiseMap, meshHeightMultiplier, meshHeightCurve);
             Mesh mesh = meshInfo.CreateMesh();
             meshDisplay.DisplayMesh(mesh, texture);
         }

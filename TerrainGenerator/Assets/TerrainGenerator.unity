@@ -152,7 +152,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.6
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -451,21 +451,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   drawType: 2
-  mapWidth: 100
-  mapHeight: 100
+  mapWidth: 256
+  mapHeight: 256
   noiseScale: 25
   octaves: 4
   persistance: 0.5
   lacunarity: 2
   mapRegions:
   - regionName: Deep Water
-    regionHeight: 0.3
+    regionHeight: 0.24
     regionColour: {r: 0, g: 0.31019312, b: 0.6226415, a: 1}
   - regionName: Sand
-    regionHeight: 0.4
+    regionHeight: 0.31
     regionColour: {r: 0.22459061, g: 0.52202684, b: 0.9716981, a: 1}
   - regionName: Mountains
-    regionHeight: 0.5
+    regionHeight: 0.35
     regionColour: {r: 0.99083656, g: 1, b: 0.7122642, a: 1}
   - regionName: Grass
     regionHeight: 0.8
@@ -474,7 +474,40 @@ MonoBehaviour:
     regionHeight: 1
     regionColour: {r: 0.3207547, g: 0.22059558, b: 0, a: 1}
   offset: {x: 0, y: 0}
-  meshScale: 10
+  meshHeightMultiplier: 15
+  meshHeightCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5758895
+      value: 0.012653299
+      inSlope: 0.16025768
+      outSlope: 0.16025768
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.035740018
+      outWeight: 0.040309545
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!4 &466243912
 Transform:
   m_ObjectHideFlags: 0
@@ -784,10 +817,10 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 98172941}
   - {fileID: 226024794}
   - {fileID: 733936498}
   - {fileID: 780372402}
   - {fileID: 466243912}
   - {fileID: 656355520}
   - {fileID: 133622844}
-  - {fileID: 98172941}

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public static class MeshGenerator 
 {
-    public static MeshInformation GenerateMesh(float[,] noiseMap, float scale)
+    public static MeshInformation GenerateMesh(float[,] noiseMap, float heightMultiplier, AnimationCurve heightCurve)
     {
         int width = noiseMap.GetLength(0);
         int height = noiseMap.GetLength(1);
@@ -19,7 +19,7 @@ public static class MeshGenerator
         {
             for (int x = 0; x < width; x++)
             {
-                meshInformation.vertices[vertIndex] = new Vector3(x, noiseMap[x,y], y);
+                meshInformation.vertices[vertIndex] = new Vector3(x, heightCurve.Evaluate(noiseMap[x,y]) * heightMultiplier, y);
                 meshInformation.uvs[vertIndex] = new Vector2(x / (float)width, y / (float)height); 
 
                 if (x < width - 1 && y < height - 1)
