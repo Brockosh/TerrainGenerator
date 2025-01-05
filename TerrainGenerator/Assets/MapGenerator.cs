@@ -8,6 +8,7 @@ public class MapGenerator : MonoBehaviour
     {
         noiseMap,
         colourMap,
+        falloffMap,
         mesh
     }
 
@@ -18,14 +19,14 @@ public class MapGenerator : MonoBehaviour
     public float noiseScale;
     public int octaves;
 
+    public float falloffScale;
+
     [Range(0, 1)] public float persistance;
     public float lacunarity;
 
 
     public MapRegion[] mapRegions;
-
     public Vector2 offset;
-
 
     public float meshHeightMultiplier;
     public AnimationCurve meshHeightCurve;
@@ -42,7 +43,8 @@ public class MapGenerator : MonoBehaviour
 
     public void GenerateMap()
     {
-        float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(mapWidth, mapHeight, noiseScale, octaves, persistance, lacunarity, offset);
+        float[,] falloffMap = FalloffGenerator.GenerateFallOffMap(mapWidth, falloffScale);
+;       float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(mapWidth, mapHeight, noiseScale, octaves, persistance, lacunarity, offset, falloffMap);
         Texture2D texture = TextureGenerator.CreateTextureFromNoiseMap(noiseMap, mapRegions);
 
         MapDisplay display = FindObjectOfType<MapDisplay>();
@@ -61,6 +63,11 @@ public class MapGenerator : MonoBehaviour
             MeshInformation meshInfo = MeshGenerator.GenerateMesh(noiseMap, meshHeightMultiplier, meshHeightCurve);
             Mesh mesh = meshInfo.CreateMesh();
             meshDisplay.DisplayMesh(mesh, texture);
+        }
+        else if (drawType == DrawType.falloffMap)
+        {
+            //float[,] falloffMap = FalloffGenerator.GenerateFallOffMap(mapWidth);
+            display.DisplayMap(falloffMap);
         }
     }
 }

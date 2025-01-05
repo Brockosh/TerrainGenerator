@@ -29,7 +29,10 @@ public class MapDisplay : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                texture.SetPixel(x, y, Color.Lerp(Color.white, Color.black, noiseMap[x, y]));
+
+
+                //THIS HAS BEEN INVERTED TO PUT BLACK FIRST
+                texture.SetPixel(x, y, Color.Lerp(Color.black, Color.white, noiseMap[x, y]));
             }
         }
 

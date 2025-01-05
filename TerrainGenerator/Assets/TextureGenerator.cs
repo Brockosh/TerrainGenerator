@@ -5,6 +5,8 @@ using UnityEngine;
 
 public static class TextureGenerator 
 {
+
+
     public static Texture2D CreateTextureFromNoiseMap(float[,] noiseMap, MapRegion[] regions)
     {
         int width = noiseMap.GetLength(0);
@@ -29,6 +31,8 @@ public static class TextureGenerator
             }
         }
 
+        texture.filterMode = FilterMode.Point; // Disables smoothing
+        texture.Apply();
 
         return texture;
     }
