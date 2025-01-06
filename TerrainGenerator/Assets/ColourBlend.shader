@@ -8,8 +8,8 @@ Shader "Custom/ColourBlendHeightBased"
         _Metallic ("Metallic", Range(0,1)) = 0.0
 
         // Define minimum and maximum heights for normalization
-        _MinHeight ("Minimum Height", Float) = 0.0
-        _MaxHeight ("Maximum Height", Float) = 10.0
+        minHeight ("Minimum Height", Float) = 0.0
+        maxHeight ("Maximum Height", Float) = 10.0
 
         _colorA ("Top Colour", Color) = (0, 1, 0, 1)
         _colorB ("Bottom Colour", Color) = (1, 0, 0, 1)
@@ -35,18 +35,32 @@ Shader "Custom/ColourBlendHeightBased"
             float3 worldPos; // World position of the fragment
         };
 
+
         // Shader properties
         half _Glossiness;
         half _Metallic;
         fixed4 _Color;
 
-        // Minimum and Maximum Height properties
-        float _MinHeight;
-        float _MaxHeight;
+        const static int maxColourCount = 8;
+        const static float epsilon = 1E-4;
 
-        // Public color properties
-        fixed4 _colorA;
-        fixed4 _colorB;
+        int colourCount;
+        float3 colours[maxColourCount];
+        float colourStartHeights[maxColourCount];
+        float baseBlends[maxColourCount];
+
+
+        // Minimum and Maximum Height properties
+        float minHeight;
+        float maxHeight;
+
+
+
+        float inverseLerp(float a, float b, float value)
+        {
+            return saturate((value - a) / (b - a));
+        }
+
 
         // Add instancing support for this shader
         UNITY_INSTANCING_BUFFER_START(Props)
@@ -55,23 +69,13 @@ Shader "Custom/ColourBlendHeightBased"
 
         void surf (Input IN, inout SurfaceOutputStandard o)
         {
+            float heightPercent = inverseLerp(minHeight, maxHeight, IN.worldPos.y);
 
-            // Obtain the Y-coordinate (height) of the fragment in world space
-            float y = IN.worldPos.y;
-
-            // Normalize the height to a range between 0 and 1
-            float t = saturate((y - _MinHeight) / (_MaxHeight - _MinHeight));
-
-            // Perform linear interpolation between colorA and colorB based on the normalized height
-            float3 blendedColor = lerp(_colorA, _colorB, t);
-
-            // Assign the blended color to Albedo
-            o.Albedo = blendedColor;
-
-            // Assign Metallic and Smoothness from properties
-            o.Metallic = _Metallic;
-            o.Smoothness = _Glossiness;
-            o.Alpha = _Color.a;
+            for (int i = 0; i < colourCount; i++)
+            {
+                float drawStrength = inverseLerp(-baseBlends[i] / 2 - epsilon, baseBlends[i] / 2, heightPercent - colourStartHeights[i]);
+                o.Albedo = o.Albedo * (1 - drawStrength) + colours[i] * drawStrength;
+            }
         }
         ENDCG
     }

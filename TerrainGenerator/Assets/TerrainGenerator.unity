@@ -450,12 +450,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17b933ffdd2dafa478422d25e0b0409d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawType: 4
+  drawType: 3
   mapWidth: 256
   mapHeight: 256
   noiseScale: 50.9
   octaves: 4
-  falloffScale: 3
+  falloffScale: 3.5
   persistance: 0.5
   lacunarity: 2
   mapRegions:
@@ -489,14 +489,14 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.5758895
-      value: 0.012653299
-      inSlope: 0.16025768
-      outSlope: 0.16025768
+      time: 0.28804773
+      value: 0.030841775
+      inSlope: 0.44878793
+      outSlope: 0.44878793
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.035740018
-      outWeight: 0.040309545
+      outWeight: 0.04522584
     - serializedVersion: 3
       time: 1
       value: 1
@@ -509,6 +509,24 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  colours:
+  - {r: 0, g: 0.14284089, b: 0.7924528, a: 0}
+  - {r: 0.10323961, g: 0.5657134, b: 0.754717, a: 0}
+  - {r: 0.93926406, g: 0.9528302, b: 0.73260057, a: 0}
+  - {r: 0.24433282, g: 0.6509434, b: 0.06448024, a: 0}
+  - {r: 0.3301887, g: 0.19883285, b: 0.017132433, a: 0}
+  colourStartHeights:
+  - 0
+  - 0.082
+  - 0.161
+  - 0.398
+  - 0.726
+  baseBlends:
+  - 0
+  - 0.1
+  - 0.216
+  - 0.611
+  - 0.939
 --- !u!4 &466243912
 Transform:
   m_ObjectHideFlags: 0
@@ -541,7 +559,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &656355518
 MeshRenderer:
   m_ObjectHideFlags: 0

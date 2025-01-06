@@ -31,6 +31,12 @@ public class MapGenerator : MonoBehaviour
     public float meshHeightMultiplier;
     public AnimationCurve meshHeightCurve;
 
+    public Color[] colours;
+    [Range(0, 1)]
+    public float[] colourStartHeights;
+    [Range(0, 1)]
+    public float[] baseBlends;
+
     private float minHeight
     {
         get { return meshHeightMultiplier * meshHeightCurve.Evaluate(0); }
@@ -55,7 +61,7 @@ public class MapGenerator : MonoBehaviour
     public void GenerateMap()
     {
         float[,] falloffMap = FalloffGenerator.GenerateFallOffMap(mapWidth, falloffScale);
-;       float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(mapWidth, mapHeight, noiseScale, octaves, persistance, lacunarity, offset, falloffMap);
+        ; float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(mapWidth, mapHeight, noiseScale, octaves, persistance, lacunarity, offset, falloffMap);
         Texture2D texture = TextureGenerator.CreateTextureFromNoiseMap(noiseMap, mapRegions);
 
         MapDisplay display = FindObjectOfType<MapDisplay>();
@@ -67,15 +73,15 @@ public class MapGenerator : MonoBehaviour
         }
         else if (drawType == DrawType.colourMap)
         {
-            display.DisplayMap(noiseMap, texture, minHeight, maxHeight);
+            display.DisplayMap(noiseMap, texture);
         }
         else if (drawType == DrawType.Mesh)
         {
             MeshInformation meshInfo = MeshGenerator.GenerateMesh(noiseMap, meshHeightMultiplier, meshHeightCurve);
             Mesh mesh = meshInfo.CreateMesh();
-            meshDisplay.DisplayMesh(mesh, texture, minHeight, maxHeight);
+            meshDisplay.DisplayMesh(mesh, texture, minHeight, maxHeight, colours, colourStartHeights, baseBlends);
         }
- 
+
         else if (drawType == DrawType.falloffMap)
         {
             //float[,] falloffMap = FalloffGenerator.GenerateFallOffMap(mapWidth);

@@ -6,15 +6,10 @@ public class MapDisplay : MonoBehaviour
 {
     public Renderer textureRenderer;
 
-    public void DisplayMap(float[,] noiseMap, Texture2D texture, float minHeight, float maxHeight)
+    public void DisplayMap(float[,] noiseMap, Texture2D texture)
     {
         int width = noiseMap.GetLength(0);
         int height = noiseMap.GetLength(1);
-
-        textureRenderer.material.SetFloat("_minHeight", minHeight);
-        Debug.Log($"Min Height = {minHeight}");
-        textureRenderer.material.SetFloat("_maxHeight", maxHeight);
-        Debug.Log($"Max Height = {maxHeight}");
 
         texture.Apply();
 

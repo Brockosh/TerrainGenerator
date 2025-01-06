@@ -7,12 +7,15 @@ public class MeshDisplay : MonoBehaviour
     public MeshFilter meshFilter;
     public MeshRenderer meshRenderer;
 
-    public void DisplayMesh(Mesh mesh, Texture2D texture, float minHeight, float maxHeight)
+    public void DisplayMesh(Mesh mesh, Texture2D texture, float minHeight, float maxHeight, Color[] colours, float[] colourStartHeights, float[] baseBlends)
     {
-        meshRenderer.material.SetFloat("_minHeight", minHeight);
-        Debug.Log($"Min Height = {minHeight}");
-        meshRenderer.material.SetFloat("_maxHeight", maxHeight);
-        Debug.Log($"Max Height = {maxHeight}");
+        meshRenderer.material.SetInt("colourCount", colours.Length);
+        meshRenderer.material.SetColorArray("colours", colours);
+        meshRenderer.material.SetFloatArray("colourStartHeights", colourStartHeights);
+        meshRenderer.material.SetFloatArray("baseBlends", baseBlends);
+
+        meshRenderer.material.SetFloat("minHeight", minHeight);
+        meshRenderer.material.SetFloat("maxHeight", maxHeight);
 
 
         meshFilter.mesh = mesh;
