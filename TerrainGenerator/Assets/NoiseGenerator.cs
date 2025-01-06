@@ -120,8 +120,7 @@ public static class NoiseGenerator
             }
         }
 
-
-                return noiseMap;
+        return noiseMap;
     }
 
     public static void GetHighestAndLowestHeight(float noiseHeight, ref float minHeight, ref float maxHeight)

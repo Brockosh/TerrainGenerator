@@ -450,10 +450,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17b933ffdd2dafa478422d25e0b0409d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawType: 3
+  drawType: 4
   mapWidth: 256
   mapHeight: 256
-  noiseScale: 25
+  noiseScale: 50.9
   octaves: 4
   falloffScale: 3
   persistance: 0.5
@@ -475,7 +475,7 @@ MonoBehaviour:
     regionHeight: 1
     regionColour: {r: 0.3207547, g: 0.22059558, b: 0, a: 1}
   offset: {x: 0, y: 0}
-  meshHeightMultiplier: 15
+  meshHeightMultiplier: 25.62
   meshHeightCurve:
     serializedVersion: 2
     m_Curve:

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Build;
 using UnityEngine;
 
 public static class MeshGenerator 
@@ -19,8 +20,8 @@ public static class MeshGenerator
         {
             for (int x = 0; x < width; x++)
             {
-                meshInformation.vertices[vertIndex] = new Vector3(x, heightCurve.Evaluate(noiseMap[x,y]) * heightMultiplier, y);
-                meshInformation.uvs[vertIndex] = new Vector2(x / (float)width, y / (float)height); 
+                meshInformation.vertices[vertIndex] = new Vector3(x, heightCurve.Evaluate(noiseMap[x, y]) * heightMultiplier, y);
+                meshInformation.uvs[vertIndex] = new Vector2(x / (float)width, y / (float)height);
 
                 if (x < width - 1 && y < height - 1)
                 {
@@ -32,7 +33,7 @@ public static class MeshGenerator
             }
         }
 
-        return meshInformation;      
+        return meshInformation;
     }
 }
 
@@ -41,6 +42,7 @@ public class MeshInformation
     public Vector3[] vertices;
     public int[] triangles;
     public Vector2[] uvs;
+    public Color[] colors;
 
     int triangleIndex;
     public MeshInformation(int width, int height)
@@ -64,6 +66,7 @@ public class MeshInformation
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.uv = uvs;
+
         mesh.RecalculateNormals();
         return mesh;
     }

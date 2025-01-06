@@ -9,7 +9,7 @@ public class MapGenerator : MonoBehaviour
         noiseMap,
         colourMap,
         falloffMap,
-        mesh
+        Mesh,
     }
 
     public DrawType drawType = DrawType.noiseMap;
@@ -30,6 +30,17 @@ public class MapGenerator : MonoBehaviour
 
     public float meshHeightMultiplier;
     public AnimationCurve meshHeightCurve;
+
+    private float minHeight
+    {
+        get { return meshHeightMultiplier * meshHeightCurve.Evaluate(0); }
+    }
+
+    private float maxHeight
+    {
+        get { return meshHeightMultiplier * meshHeightCurve.Evaluate(1); }
+    }
+
 
     private void Start()
     {
@@ -56,14 +67,15 @@ public class MapGenerator : MonoBehaviour
         }
         else if (drawType == DrawType.colourMap)
         {
-            display.DisplayMap(noiseMap, texture);
+            display.DisplayMap(noiseMap, texture, minHeight, maxHeight);
         }
-        else if (drawType == DrawType.mesh)
+        else if (drawType == DrawType.Mesh)
         {
             MeshInformation meshInfo = MeshGenerator.GenerateMesh(noiseMap, meshHeightMultiplier, meshHeightCurve);
             Mesh mesh = meshInfo.CreateMesh();
-            meshDisplay.DisplayMesh(mesh, texture);
+            meshDisplay.DisplayMesh(mesh, texture, minHeight, maxHeight);
         }
+ 
         else if (drawType == DrawType.falloffMap)
         {
             //float[,] falloffMap = FalloffGenerator.GenerateFallOffMap(mapWidth);
